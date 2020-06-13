@@ -2,26 +2,30 @@ import Head from "next/head"
 import { Frame } from "framer"
 import { motion } from "framer-motion"
 import { randomCar } from "./cars"
+import { useRef, useEffect, useState } from "react"
 
-const Car = () => {
+const Car = ({ frameRef }) => {
   const car = randomCar()
   return (
-    <motion.div
-      style={{ fontSize: "20vh" }}
-      drag={true}
-      // dragConstraints={{ left: -100, right: 100 }}
+    <Frame style={{ fontSize: "20vh",
+    }}
+    drag={true}
+    dragConstraints={frameRef}
     >
       {car}
-    </motion.div>
+    </Frame>
   )
 }
 const Home = () => {
+  const ref = useRef(null)
+  const [ready, setReady] = useState(false)
+  useEffect(() => {
+    setReady(!!ref.current)
+  }, [ref.current])
   return (
-    <div className="container">
-      <Frame width="90vw" height="90vh" background={"#ccc"}>
-        <Car />
+      <Frame width="90vw" height="90vh" background={"#ccc"} ref={ref} center>
+        <Car frameRef={ref} />
       </Frame>
-    </div>
   )
 }
 
